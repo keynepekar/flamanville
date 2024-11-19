@@ -18,5 +18,5 @@ Et pourquoi pas. *(et aussi car on l'aime beaucoup ce flamant)*
 
 ## Auteurs
 
-- [Keyne PEKAR - @Keyne113]((https://github.com/keynepekar))
+- [Keyne PEKAR - @Keyne113](https://github.com/keynepekar)
 - [Jules DAVIDOU - @the-sayreth](https://github.com/the-sayreth)
