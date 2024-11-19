@@ -247,38 +247,3 @@ void dessiner_et_remplir_forme(RVB **im, const char *nomFichier, RVB couleurCont
     free(donneesTrace.segments);
     free(edgeList.edges);
 }
-
-void dessiner_soleil(RVB **t, COORD centre, double rayonInterieur, double rayonExterieur, RVB couleurSoleil) {
-    int xMin = (int)(centre.x - rayonExterieur);
-    int xMax = (int)(centre.x + rayonExterieur);
-    int yMin = (int)(centre.y - rayonExterieur);
-    int yMax = (int)(centre.y + rayonExterieur);
-
-    if (xMin < 0) xMin = 0;
-    if (xMax >= W) xMax = W - 1;
-    if (yMin < 0) yMin = 0;
-    if (yMax >= H) yMax = H - 1;
-
-    for (int y = yMin; y <= yMax; ++y) {
-        for (int x = xMin; x <= xMax; ++x) {
-            double dx = x - centre.x;
-            double dy = y - centre.y;
-            double distance = sqrt(dx * dx + dy * dy);
-
-            if (distance <= rayonInterieur) {
-                t[y][x] = couleurSoleil;
-            } else if (distance <= rayonExterieur) {
-                double ratio = (distance - rayonInterieur) / (rayonExterieur - rayonInterieur);
-
-                RVB couleurFond = t[y][x];
-
-                RVB couleurMelangee;
-                couleurMelangee.R = (int)((1 - ratio) * couleurSoleil.R + ratio * couleurFond.R);
-                couleurMelangee.V = (int)((1 - ratio) * couleurSoleil.V + ratio * couleurFond.V);
-                couleurMelangee.B = (int)((1 - ratio) * couleurSoleil.B + ratio * couleurFond.B);
-
-                t[y][x] = couleurMelangee;
-            }
-        }
-    }
-}

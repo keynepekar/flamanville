@@ -24,25 +24,49 @@ int main() {
     RVB couleurBas = {253, 208, 134};
     fond_degrade_rectangle(im, p1, p2, couleurHaut, couleurBas);
 
-    // Soleil
-    dessiner_soleil(im, (COORD){825, 450}, 40, 100, (RVB){250, 221, 186});
-
     // Montagnes
-    dessiner_et_remplir_forme(im, "./assets/Montagne3.txt", (RVB){125, 175, 179}, (RVB){125, 175, 179}, 0, 150);
-    dessiner_et_remplir_forme(im, "./assets/Montagne2.txt", (RVB){99, 159, 167}, (RVB){99, 159, 167}, -1, 150);
-    dessiner_et_remplir_forme(im, "./assets/Montagne1.txt", (RVB){67, 114, 119}, (RVB){67, 114, 119}, 0, 150);
+    dessiner_et_remplir_forme(im, "./assets/Montagne3.txt", (RVB){0, 0, 0}, (RVB){125, 175, 179}, 0, 120);
+    dessiner_et_remplir_forme(im, "./assets/Montagne2.txt", (RVB){0, 0, 0}, (RVB){99, 159, 167}, 0, 120);
+    dessiner_et_remplir_forme(im, "./assets/Montagne1.txt", (RVB){0, 0, 0}, (RVB){67, 114, 119}, 0, 120);
 
-    // Nuages
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Long1.txt", (RVB){177, 189, 153}, (RVB){177, 189, 153}, 0, 0);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Long2.txt", (RVB){198, 195, 148}, (RVB){198, 195, 148}, 0, 0);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond1.1.txt", (RVB){253, 208, 138}, (RVB){253, 208, 138}, 0, 0);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond1.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 0);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond2.1.txt", (RVB){253, 208, 138}, (RVB){253, 208, 138}, 0, 275);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond2.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 275);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond3.1.txt", (RVB){253, 208, 138}, (RVB){253, 208, 138}, 0, 175);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond3.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 216);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond4.1.txt", (RVB){253, 208, 138}, (RVB){253, 208, 138}, 0, 0);
-    dessiner_et_remplir_forme(im, "./assets/Nuage-Rond4.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 0);
+    // Sol
+    dessiner_et_remplir_forme(im, "./assets/Sol.txt", (RVB){0, 0, 0}, (RVB){65, 86, 34}, 0, 40);
+
+    // Tente
+    dessiner_et_remplir_forme(im, "./assets/Tente1.txt", (RVB){0, 0, 0}, (RVB){179, 112, 21}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Tente2.txt", (RVB){0, 0, 0}, (RVB){246, 159, 27}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Tente3.txt", (RVB){0, 0, 0}, (RVB){100, 65, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Tente4.txt", (RVB){0, 0, 0}, (RVB){100, 65, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Tente5.txt", (RVB){0, 0, 0}, (RVB){246, 159, 27}, 0, 0);
+
+    // Arbre
+    dessiner_et_remplir_forme(im, "./assets/Tronc.txt", (RVB){0, 0, 0}, (RVB){97, 43, 18}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille1.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille2.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille3.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille4.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille5.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille6.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille7.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Feuille8.txt", (RVB){0, 0, 0}, (RVB){90, 132, 46}, 0, 0);
+
+    // Table pique-nique
+    dessiner_et_remplir_forme(im, "./assets/Barre-ar.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Pied-ar-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Pied-arr-droit.txt", (RVB){0, 0, 0}, (RVB){98, 32, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Pied-av-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/siege-droit-dessus.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/siege-droit-contour.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Pied-av-droit.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/barre-av.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Siege-gauche-dessus.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Siege-gauche-contour.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout1-siege-gauche.txt", (RVB){0, 0, 0}, (RVB){178, 66, 24}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/table-contour.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/table-dessus.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/table-barre-dessous.txt", (RVB){0, 0, 0}, (RVB){154, 62, 22}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/Bordure-siege-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout2-siege-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
 
     ecrire_corps(im, df);
 
