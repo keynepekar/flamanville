@@ -41,7 +41,7 @@ int main() {
 
     // Montagnes
     dessiner_et_remplir_forme(im, "./assets/Montagne3.txt", (RVB){125, 175, 179}, (RVB){125, 175, 179}, 0, 150);
-    dessiner_et_remplir_forme(im, "./assets/Montagne2.txt", (RVB){99, 159, 167}, (RVB){99, 159, 167}, -1, 150);
+    dessiner_et_remplir_forme(im, "./assets/Montagne2.txt", (RVB){99, 159, 167}, (RVB){99, 159, 167}, -1, 151);
     dessiner_et_remplir_forme(im, "./assets/Montagne1.txt", (RVB){67, 114, 119}, (RVB){67, 114, 119}, 0, 150);
 
     // Nuages
@@ -80,6 +80,8 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Tente3.txt", (RVB){0, 0, 0}, (RVB){100, 65, 17}, 0, 0);
     dessiner_et_remplir_forme(im, "./assets/Tente4.txt", (RVB){0, 0, 0}, (RVB){100, 65, 17}, 0, 0);
     dessiner_et_remplir_forme(im, "./assets/Tente5.txt", (RVB){0, 0, 0}, (RVB){246, 159, 27}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/PatchTente1.txt", (RVB){0, 0, 0}, (RVB){179, 112, 21}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/PatchTente2.txt", (RVB){0, 0, 0}, (RVB){179, 112, 21}, 0, 0);
 
     // Arbre 1
     dessiner_et_remplir_forme(im, "./assets/Tronc.txt", (RVB){0, 0, 0}, (RVB){97, 43, 18}, 0, 0);
