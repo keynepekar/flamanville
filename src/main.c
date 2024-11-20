@@ -68,6 +68,20 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Bordure-siege-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
     dessiner_et_remplir_forme(im, "./assets/bout2-siege-gauche.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
 
+    // Buche
+    dessiner_et_remplir_forme(im, "./assets/tronc2.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/rainure1.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/rainure2.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/rainure3.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/rainure4.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/rainure5.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout1.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout2.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout3.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout4.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout5.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+    dessiner_et_remplir_forme(im, "./assets/bout6.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, 0, 0);
+
     ecrire_corps(im, df);
 
     liberer_buffer(im);
