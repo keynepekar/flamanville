@@ -231,6 +231,8 @@ void fond_degrade_rectangle(RVB **t, COORD p1, COORD p2, RVB couleurHaut, RVB co
 void dessiner_et_remplir_forme(RVB **im, const char *nomFichier, RVB couleurContour, RVB couleurRemplissage, double offsetX, double offsetY) {
     DonneesTrace donneesTrace = lire_svg(nomFichier);
 
+    couleurContour = couleurRemplissage; // changement de DA et ça nous facilite la vie !
+
     EdgeList edgeList;
     edgeList.count = 0;
     edgeList.capacity = 1000;

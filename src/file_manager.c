@@ -6,31 +6,27 @@
 
 #define LONGUEUR_LIGNE 256
 
-RVB **allouer_buffer() {
-    RVB **im = malloc(H * sizeof(RVB *));
-    if (im == NULL) {
-        fprintf(stderr, "Erreur d'allocation mémoire.\n");
+RVB **allouer_buffer(int largeur, int hauteur) {
+    RVB **t = malloc(hauteur * sizeof(RVB *));
+    if (t == NULL) {
+        fprintf(stderr, "Erreur d'allocation mémoire pour le buffer d'image.\n");
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < H; ++i) {
-        im[i] = malloc(W * sizeof(RVB));
-        if (im[i] == NULL) {
-            fprintf(stderr, "Erreur d'allocation mémoire.\n");
-            for (int j = 0; j < i; ++j) {
-                free(im[j]);
-            }
-            free(im);
+    for (int i = 0; i < hauteur; ++i) {
+        t[i] = malloc(largeur * sizeof(RVB));
+        if (t[i] == NULL) {
+            fprintf(stderr, "Erreur d'allocation mémoire pour la ligne %d du buffer d'image.\n", i);
             exit(EXIT_FAILURE);
         }
     }
-    return im;
+    return t;
 }
 
-void liberer_buffer(RVB **im) {
-    for (int i = 0; i < H; ++i) {
-        free(im[i]);
+void liberer_buffer(RVB **t, int hauteur) {
+    for (int i = 0; i < hauteur; ++i) {
+        free(t[i]);
     }
-    free(im);
+    free(t);
 }
 
 FILE *lire_image(const char *nomfichier) {
@@ -124,4 +120,56 @@ DonneesTrace lire_svg(const char *nomfichier) {
 
     fclose(file);
     return donneesTrace;
+}
+
+RVB **redimensionner_image(RVB **imageHD, int largeurHD, int hauteurHD, int largeurBD, int hauteurBD) {
+    RVB **imageBD = malloc(hauteurBD * sizeof(RVB *));
+    for (int i = 0; i < hauteurBD; ++i) {
+        imageBD[i] = malloc(largeurBD * sizeof(RVB));
+    }
+
+    double ratioX = (double)largeurHD / largeurBD;
+    double ratioY = (double)hauteurHD / hauteurBD;
+
+    for (int yBD = 0; yBD < hauteurBD; ++yBD) {
+        for (int xBD = 0; xBD < largeurBD; ++xBD) {
+            double xHD = xBD * ratioX;
+            double yHD = yBD * ratioY;
+
+            int xHD_int = (int)xHD;
+            int yHD_int = (int)yHD;
+
+            double x_diff = xHD - xHD_int;
+            double y_diff = yHD - yHD_int;
+
+            RVB A = imageHD[yHD_int][xHD_int];
+            RVB B = imageHD[yHD_int][xHD_int + 1 < largeurHD ? xHD_int + 1 : xHD_int];
+            RVB C = imageHD[yHD_int + 1 < hauteurHD ? yHD_int + 1 : yHD_int][xHD_int];
+            RVB D = imageHD[yHD_int + 1 < hauteurHD ? yHD_int + 1 : yHD_int][xHD_int + 1 < largeurHD ? xHD_int + 1 : xHD_int];
+
+            RVB pixel;
+            pixel.R = (int)(
+                    A.R * (1 - x_diff) * (1 - y_diff) +
+                    B.R * x_diff * (1 - y_diff) +
+                    C.R * (1 - x_diff) * y_diff +
+                    D.R * x_diff * y_diff
+            );
+            pixel.V = (int)(
+                    A.V * (1 - x_diff) * (1 - y_diff) +
+                    B.V * x_diff * (1 - y_diff) +
+                    C.V * (1 - x_diff) * y_diff +
+                    D.V * x_diff * y_diff
+            );
+            pixel.B = (int)(
+                    A.B * (1 - x_diff) * (1 - y_diff) +
+                    B.B * x_diff * (1 - y_diff) +
+                    C.B * (1 - x_diff) * y_diff +
+                    D.B * x_diff * y_diff
+            );
+
+            imageBD[yBD][xBD] = pixel;
+        }
+    }
+
+    return imageBD;
 }
