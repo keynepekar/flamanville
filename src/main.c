@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include "constantes.h"
 #include "structures.h"
 #include "file_manager.h"
@@ -54,6 +55,24 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Nuage-Rond3.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 216);
     dessiner_et_remplir_forme(im, "./assets/Nuage-Rond4.1.txt", (RVB){253, 208, 138}, (RVB){253, 208, 138}, 0, 0);
     dessiner_et_remplir_forme(im, "./assets/Nuage-Rond4.2.txt", (RVB){242, 191, 125}, (RVB){242, 191, 125}, 0, 0);
+
+    // Trifoliums
+    trifolium(im, (RVB){117, 170, 44}, 25.0, (COORD){95, 940}, M_PI / 4);
+    trifolium(im, (RVB){110, 175, 42}, 18.0, (COORD){60, 995}, M_PI / 2);
+    trifolium(im, (RVB){114, 188, 53}, 23.6, (COORD){39, 1027}, 2.09);
+    trifolium(im, (RVB){130, 166, 31}, 21.5, (COORD){522, 1072}, 0.89);
+    trifolium(im, (RVB){116, 183, 50}, 22.7, (COORD){275, 1075}, 0.10);
+    trifolium(im, (RVB){118, 166, 35}, 21.9, (COORD){958, 1040}, 2.14);
+    trifolium(im, (RVB){123, 181, 50}, 22.9, (COORD){179, 963}, 2.48);
+    trifolium(im, (RVB){124, 162, 47}, 16.7, (COORD){1072, 1015}, 1.51);
+    trifolium(im, (RVB){119, 185, 48}, 22.8, (COORD){859, 1073}, 0.64);
+    trifolium(im, (RVB){115, 182, 37}, 21.3, (COORD){1650, 1075}, 0.05);
+    trifolium(im, (RVB){125, 157, 52}, 19.0, (COORD){1618, 984}, 3.01);
+    trifolium(im, (RVB){113, 170, 34}, 24.6, (COORD){702, 958}, 2.41);
+    trifolium(im, (RVB){112, 186, 56}, 20.7, (COORD){572, 956}, 1.90);
+    trifolium(im, (RVB){124, 183, 40}, 22.4, (COORD){1239, 990}, 2.69);
+    trifolium(im, (RVB){110, 183, 50}, 18.7, (COORD){1858, 1060}, 2.41);
+    trifolium(im, (RVB){110, 172, 42}, 24.8, (COORD){1421, 951}, 1.88);
 
     // Tente
     dessiner_et_remplir_forme(im, "./assets/Tente1.txt", (RVB){0, 0, 0}, (RVB){179, 112, 21}, 0, 0);
