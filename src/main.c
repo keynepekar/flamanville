@@ -134,7 +134,21 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Flamanville10.txt", (RVB){0, 0, 0}, (RVB){193, 180, 185}, 0, 25);
 
     // Le quadrifolium
-    quadrifolium(im, (RVB){51, 204, 51}, 24.8, (COORD){1380, 760}, M_PI / 6);
+    quadrifolium(im, (RVB){224, 117, 231}, 24.8, (COORD){1380, 760}, M_PI / 6);
+
+    // Buche
+    dessiner_et_remplir_forme(im, "./assets/tronc2.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/rainure1.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/rainure2.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/rainure3.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/rainure4.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/rainure5.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout1.txt", (RVB){0, 0, 0}, (RVB){124, 54, 17}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout2.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout3.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout4.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout5.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
+    dessiner_et_remplir_forme(im, "./assets/bout6.txt", (RVB){0, 0, 0}, (RVB){99, 42, 16}, -680, 75);
 
     ecrire_corps(im, df);
 
