@@ -285,10 +285,6 @@ void dessiner_soleil(RVB **t, COORD centre, double rayonInterieur, double rayonE
     }
 }
 
-#include <math.h>
-#include "constantes.h" // Pour W et H
-#include "structures.h" // Pour RVB et COORD
-
 void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     double cosTheta = cos(angle);
     double sinTheta = sin(angle);
@@ -317,3 +313,34 @@ void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
         }
     }
 }
+
+void quadrifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
+    double cosTheta = cos(angle);
+    double sinTheta = sin(angle);
+
+    double dx = centre.x;
+    double dy = centre.y;
+
+    for (int i = 0; i < H; ++i) {
+        for (int j = 0; j < W; ++j) {
+            double x = j;
+            double y = i;
+
+            // translation
+            double xt = x - dx;
+            double yt = y - dy;
+
+            // rotation et placement à l'origine
+            double x2 = cosTheta * xt + sinTheta * yt;
+            double y2 = -sinTheta * xt + cosTheta * yt;
+
+            // 4 feuilles svp chef
+            double f = pow(x2 * x2 + y2 * y2, 3) - a * a * (pow(x2, 4) - 6 * x2 * x2 * y2 * y2 + pow(y2, 4));
+
+            if (f < 0) {
+                im[i][j] = teinte;
+            }
+        }
+    }
+}
+

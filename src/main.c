@@ -133,6 +133,9 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Flamanville9.txt", (RVB){0, 0, 0}, (RVB){11, 12, 12}, 0, 25);
     dessiner_et_remplir_forme(im, "./assets/Flamanville10.txt", (RVB){0, 0, 0}, (RVB){193, 180, 185}, 0, 25);
 
+    // Le quadrifolium
+    quadrifolium(im, (RVB){51, 204, 51}, 24.8, (COORD){1380, 760}, M_PI / 6);
+
     ecrire_corps(im, df);
 
     // Anti-aliasing
