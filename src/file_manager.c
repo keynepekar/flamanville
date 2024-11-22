@@ -6,6 +6,11 @@
 
 #define LONGUEUR_LIGNE 256
 
+/*
+ * Alloue dynamiquement un buffer pour une image de dimensions largeur x hauteur.
+ * largeur : largeur de l'image (px)
+ * hauteur : hauteur de l'image (px)
+ */
 RVB **allouer_buffer(int largeur, int hauteur) {
     RVB **t = malloc(hauteur * sizeof(RVB *));
     if (t == NULL) {
@@ -22,6 +27,10 @@ RVB **allouer_buffer(int largeur, int hauteur) {
     return t;
 }
 
+/*
+ * Libère la mémoire allouée pour le buffer d'image.
+ * hauteur : nombre de lignes du buffer à libérer
+ */
 void liberer_buffer(RVB **t, int hauteur) {
     for (int i = 0; i < hauteur; ++i) {
         free(t[i]);
@@ -29,6 +38,11 @@ void liberer_buffer(RVB **t, int hauteur) {
     free(t);
 }
 
+/*
+ * Ouvre un fichier en écriture pour y enregistrer l'image.
+ * nomfichier : nom du fichier à ouvrir
+ * Retourne un pointeur vers le fichier ouvert.
+ */
 FILE *lire_image(const char *nomfichier) {
     FILE *df = fopen(nomfichier, "w");
     if (df == NULL) {
@@ -38,23 +52,38 @@ FILE *lire_image(const char *nomfichier) {
     return df;
 }
 
+/*
+ * Ferme le fichier passé en paramètre.
+ */
 void fermer_image(FILE *df) {
     fclose(df);
 }
 
+/*
+ * Écrit l'en-tête du fichier image au format PPM.
+ */
 void ecrire_header(FILE *df) {
-    fprintf(df, "P3\n%d %d\n%d\n", W, H, P);
+    fprintf(df, "P3\n%d %d\n%d\n", W_FHD, H_FHD, P);
 }
 
+/*
+ * Écrit le contenu de l'image dans le fichier.
+ * t : buffer de l'image
+ */
 void ecrire_corps(RVB **t, FILE *df) {
-    for (int i = 0; i < H; ++i) {
-        for (int j = 0; j < W; ++j) {
+    for (int i = 0; i < H_FHD; ++i) {
+        for (int j = 0; j < W_FHD; ++j) {
             fprintf(df, "%d %d %d ", t[i][j].R, t[i][j].V, t[i][j].B);
         }
         fprintf(df, "\n");
     }
 }
 
+/*
+ * Lit un fichier TXT d'un SVG déjà parsé et extrait les données de tracé.
+ * nomfichier : nom du fichier TXT à lire
+ * Retourne une structure DonneesTrace contenant les segments à tracer.
+ */
 DonneesTrace lire_svg(const char *nomfichier) {
     FILE *file = fopen(nomfichier, "r");
     if (file == NULL) {
@@ -122,17 +151,24 @@ DonneesTrace lire_svg(const char *nomfichier) {
     return donneesTrace;
 }
 
-RVB **redimensionner_image(RVB **imageHD, int largeurHD, int hauteurHD, int largeurBD, int hauteurBD) {
-    RVB **imageBD = malloc(hauteurBD * sizeof(RVB *));
-    for (int i = 0; i < hauteurBD; ++i) {
-        imageBD[i] = malloc(largeurBD * sizeof(RVB));
+/*
+ * Redimensionne une image haute définition en une image basse définition en appliquant un anti-aliasing.
+ * Utilise l'interpolation bilinéaire pour le filtrage.
+ * largeurFHD, hauteurFHD : dimensions de l'image FHD
+ * largeurHD, hauteurHD : dimensions de l'image HD (cible)
+ * Retourne le buffer de l'image redimensionnée.
+ */
+RVB **redimensionner_image(RVB **imageFHD, int largeurFHD, int hauteurFHD, int largeurHD, int hauteurHD) {
+    RVB **imageBD = malloc(hauteurHD * sizeof(RVB *));
+    for (int i = 0; i < hauteurHD; ++i) {
+        imageBD[i] = malloc(largeurHD * sizeof(RVB));
     }
 
-    double ratioX = (double)largeurHD / largeurBD;
-    double ratioY = (double)hauteurHD / hauteurBD;
+    double ratioX = (double)largeurFHD / largeurHD;
+    double ratioY = (double)hauteurFHD / hauteurHD;
 
-    for (int yBD = 0; yBD < hauteurBD; ++yBD) {
-        for (int xBD = 0; xBD < largeurBD; ++xBD) {
+    for (int yBD = 0; yBD < hauteurHD; ++yBD) {
+        for (int xBD = 0; xBD < largeurHD; ++xBD) {
             double xHD = xBD * ratioX;
             double yHD = yBD * ratioY;
 
@@ -142,10 +178,10 @@ RVB **redimensionner_image(RVB **imageHD, int largeurHD, int hauteurHD, int larg
             double x_diff = xHD - xHD_int;
             double y_diff = yHD - yHD_int;
 
-            RVB A = imageHD[yHD_int][xHD_int];
-            RVB B = imageHD[yHD_int][xHD_int + 1 < largeurHD ? xHD_int + 1 : xHD_int];
-            RVB C = imageHD[yHD_int + 1 < hauteurHD ? yHD_int + 1 : yHD_int][xHD_int];
-            RVB D = imageHD[yHD_int + 1 < hauteurHD ? yHD_int + 1 : yHD_int][xHD_int + 1 < largeurHD ? xHD_int + 1 : xHD_int];
+            RVB A = imageFHD[yHD_int][xHD_int];
+            RVB B = imageFHD[yHD_int][xHD_int + 1 < largeurFHD ? xHD_int + 1 : xHD_int];
+            RVB C = imageFHD[yHD_int + 1 < hauteurFHD ? yHD_int + 1 : yHD_int][xHD_int];
+            RVB D = imageFHD[yHD_int + 1 < hauteurFHD ? yHD_int + 1 : yHD_int][xHD_int + 1 < largeurFHD ? xHD_int + 1 : xHD_int];
 
             RVB pixel;
             pixel.R = (int)(

@@ -4,18 +4,12 @@
 #include "structures.h"
 #include "file_manager.h"
 #include "dessin.h"
-#include "transformations.h"
 
 int main() {
     RVB **im;
     FILE *df;
 
-    int largeurHD = 1920;
-    int hauteurHD = 1080;
-    int largeurBD = 1280;
-    int hauteurBD = 720;
-
-    im = allouer_buffer(largeurHD, hauteurHD);
+    im = allouer_buffer(W_FHD, H_FHD);
 
     df = lire_image("flamanville.ppm");
     ecrire_header(df);
@@ -25,7 +19,7 @@ int main() {
 
     // Ciel
     COORD p1 = {0, 0};
-    COORD p2 = {W - 1, H / 2};
+    COORD p2 = {W_FHD - 1, H_FHD / 2};
     RVB couleurHaut = {39, 158, 184};
     RVB couleurBas = {253, 208, 134};
     fond_degrade_rectangle(im, p1, p2, couleurHaut, couleurBas);
@@ -34,10 +28,13 @@ int main() {
     dessiner_soleil(im, (COORD){825, 450}, 40, 100, (RVB){250, 221, 186});
 
     // Sol
-    fond_degrade_rectangle(im, (COORD){0, 700}, (COORD){W - 1, 975}, (RVB){185, 190, 154}, (RVB){120, 194, 204});
+    fond_degrade_rectangle(im, (COORD){0, 700}, (COORD){W_FHD - 1, 975}, (RVB){185, 190, 154}, (RVB){120, 194, 204});
     dessiner_et_remplir_forme(im, "./assets/Sol.txt", (RVB){65, 86, 34}, (RVB){82, 122, 45}, 0, 40);
     dessiner_et_remplir_forme(im, "./assets/Terre.txt", (RVB){143, 59, 20}, (RVB){143, 59, 20}, 0, 20);
     dessiner_et_remplir_forme(im, "./assets/Pelouse.txt", (RVB){95, 137, 46}, (RVB){95, 137, 46}, 0, 20);
+
+    // Caribou
+    dessiner_et_remplir_forme(im, "./assets/Caribou.txt", (RVB){0, 0, 0}, (RVB){0, 0, 0}, 0, 22);
 
     // Montagnes
     dessiner_et_remplir_forme(im, "./assets/Montagne3.txt", (RVB){125, 175, 179}, (RVB){125, 175, 179}, 0, 150);
@@ -155,16 +152,16 @@ int main() {
     ecrire_corps(im, df);
 
     // Anti-aliasing
-    RVB **imBD = redimensionner_image(im, largeurHD, hauteurHD, largeurBD, hauteurBD);
+    RVB **imBD = redimensionner_image(im, W_FHD, H_FHD, W_HD, H_HD);
     df = fopen("flamanville.ppm", "w");
     if (df == NULL) {
         fprintf(stderr, "Erreur lors de l'ouverture du fichier flamanville.ppm.\n");
         exit(EXIT_FAILURE);
     }
-    fprintf(df, "P3\n%d %d\n%d\n", largeurBD, hauteurBD, P);
+    fprintf(df, "P3\n%d %d\n%d\n", W_HD, H_HD, P);
 
-    for (int i = 0; i < hauteurBD; ++i) {
-        for (int j = 0; j < largeurBD; ++j) {
+    for (int i = 0; i < H_HD; ++i) {
+        for (int j = 0; j < W_HD; ++j) {
             fprintf(df, "%d %d %d ", imBD[i][j].R, imBD[i][j].V, imBD[i][j].B);
         }
         fprintf(df, "\n");
@@ -173,8 +170,8 @@ int main() {
     fclose(df);
 
     // Libérer la mémoire
-    liberer_buffer(im, hauteurHD);
-    liberer_buffer(imBD, hauteurBD);
+    liberer_buffer(im, H_FHD);
+    liberer_buffer(imBD, H_HD);
 
     return 0;
 }

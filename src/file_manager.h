@@ -12,6 +12,6 @@ void fermer_image(FILE *df);
 void ecrire_header(FILE *df);
 void ecrire_corps(RVB **t, FILE *df);
 DonneesTrace lire_svg(const char *nomfichier);
-RVB **redimensionner_image(RVB **imageHD, int largeurHD, int hauteurHD, int largeurBD, int hauteurBD);
+RVB **redimensionner_image(RVB **imageFHD, int largeurFHD, int hauteurFHD, int largeurHD, int hauteurHD);
 
 #endif /* FILE_MANAGER_H */

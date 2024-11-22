@@ -6,26 +6,39 @@
 #include "transformations.h"
 #include "file_manager.h"
 
+/*
+ * Remplissage par balayage du buffer avec une teinte unie.
+*/
 void fond(RVB **t, RVB teinte) {
-    for (int i = 0; i < H; ++i) {
-        for (int j = 0; j < W; ++j) {
+    for (int i = 0; i < H_FHD; ++i) {
+        for (int j = 0; j < W_FHD; ++j) {
             t[i][j] = teinte;
         }
     }
 }
 
+/*
+ * Remplissage par balayage de la zone rectangulaire délimitée par les coordonnées p1 et p2.
+ * p1 : point haut gauche
+ * p2 : point bas droit
+ */
 void dessiner_rectangle(RVB **t, COORD p1, COORD p2, RVB teinte) {
     for (int i = p1.y; i <= p2.y; ++i) {
         for (int j = p1.x; j <= p2.x; ++j) {
-            if (i >= 0 && i < H && j >= 0 && j < W) {
+            if (i >= 0 && i < H_FHD && j >= 0 && j < W_FHD) {
                 t[i][j] = teinte;
             }
         }
     }
 }
 
+/*
+ * Dessine un segment entre p1 et p2 en utilisant l'algorithme de Bresenham.
+ * teinte : couleur du segment
+ * edgeList : liste des arêtes pour le remplissage (scanline)
+ */
 void dessiner_segment(RVB **t, COORD p1, COORD p2, RVB teinte, EdgeList *edgeList) {
-    // cimer Jack E. Bresenham
+    // Gestion de la liste des arêtes
     if (edgeList->count >= edgeList->capacity) {
         edgeList->capacity *= 2;
         edgeList->edges = realloc(edgeList->edges, edgeList->capacity * sizeof(Edge));
@@ -40,6 +53,7 @@ void dessiner_segment(RVB **t, COORD p1, COORD p2, RVB teinte, EdgeList *edgeLis
     edgeList->edges[edgeList->count].y1 = p2.y;
     edgeList->count++;
 
+    // Algorithme de Bresenham pour le tracé du segment
     int x0 = (int)p1.x;
     int y0 = (int)p1.y;
     int x1 = (int)p2.x;
@@ -50,7 +64,7 @@ void dessiner_segment(RVB **t, COORD p1, COORD p2, RVB teinte, EdgeList *edgeLis
     int err = dx + dy, e2;
 
     while (1) {
-        if (x0 >= 0 && x0 < W && y0 >= 0 && y0 < H) {
+        if (x0 >= 0 && x0 < W_FHD && y0 >= 0 && y0 < H_FHD) {
             t[y0][x0] = teinte;
         }
         if (x0 == x1 && y0 == y1) break;
@@ -60,8 +74,13 @@ void dessiner_segment(RVB **t, COORD p1, COORD p2, RVB teinte, EdgeList *edgeLis
     }
 }
 
+/*
+ * Dessine une courbe de Bézier cubique définie par les points de contrôle p0 à p3.
+ * Utilise l'algorithme de De Casteljau pour le calcul.
+ * teinte : couleur de la courbe
+ * edgeList : liste des arêtes pour le remplissage (scanline)
+ */
 void dessiner_bezier_cubique(RVB **t, COORD p0, COORD p1, COORD p2, COORD p3, RVB teinte, EdgeList *edgeList) {
-    // on peut remercier Paul de Casteljau pour l'algorithme ! :)
     int pas = 1000;
     COORD prevPoint = p0;
     for (int i = 1; i <= pas; ++i) {
@@ -91,11 +110,18 @@ void dessiner_bezier_cubique(RVB **t, COORD p0, COORD p1, COORD p2, COORD p3, RV
     }
 }
 
+/*
+ * Dessine un tracé à partir des données de segments et courbes.
+ * Applique des transformations d'échelle et de translation.
+ * donneesTrace : données du tracé (segments, courbes)
+ * offsetX, offsetY : décalages pour la translation
+ * edgeList : liste des arêtes pour le remplissage (scanline)
+ */
 void dessiner_trace(RVB **t, DonneesTrace donneesTrace, RVB teinte, double offsetX, double offsetY, EdgeList *edgeList) {
     COORD pointCourant = {0, 0};
 
-    double scaleX = W / 1920.0;
-    double scaleY = H / 1080.0;
+    double scaleX = W_FHD / 1920.0;
+    double scaleY = H_FHD / 1080.0;
 
     for (int i = 0; i < donneesTrace.nb; ++i) {
         SegmentsTrace segment = donneesTrace.segments[i];
@@ -144,8 +170,13 @@ void dessiner_trace(RVB **t, DonneesTrace donneesTrace, RVB teinte, double offse
     }
 }
 
+/*
+ * Remplit une forme fermée en utilisant l'algorithme de scanline.
+ * edgeList : liste des arêtes de la forme
+ * couleurRemplissage : couleur pour remplir la forme
+ */
 void remplir_scanline(RVB **t, EdgeList *edgeList, RVB couleurRemplissage) {
-    int yMin = H - 1, yMax = 0;
+    int yMin = H_FHD - 1, yMax = 0;
     for (int i = 0; i < edgeList->count; ++i) {
         int y0 = (int)round(edgeList->edges[i].y0);
         int y1 = (int)round(edgeList->edges[i].y1);
@@ -155,7 +186,7 @@ void remplir_scanline(RVB **t, EdgeList *edgeList, RVB couleurRemplissage) {
         if (y1 > yMax) yMax = y1;
     }
     if (yMin < 0) yMin = 0;
-    if (yMax >= H) yMax = H - 1;
+    if (yMax >= H_FHD) yMax = H_FHD - 1;
 
     for (int y = yMin; y <= yMax; ++y) {
         double *intersections = malloc(edgeList->count * sizeof(double));
@@ -194,10 +225,10 @@ void remplir_scanline(RVB **t, EdgeList *edgeList, RVB couleurRemplissage) {
             int xEnd = (int)floor(intersections[i + 1]);
 
             if (xStart < 0) xStart = 0;
-            if (xEnd >= W) xEnd = W - 1;
+            if (xEnd >= W_FHD) xEnd = W_FHD - 1;
 
             for (int x = xStart; x <= xEnd; ++x) {
-                if (x >= 0 && x < W && y >= 0 && y < H) {
+                if (x >= 0 && x < W_FHD && y >= 0 && y < H_FHD) {
                     t[y][x] = couleurRemplissage;
                 }
             }
@@ -207,6 +238,13 @@ void remplir_scanline(RVB **t, EdgeList *edgeList, RVB couleurRemplissage) {
     }
 }
 
+/*
+ * Remplit un rectangle avec un dégradé vertical entre couleurHaut et couleurBas.
+ * p1 : point haut gauche
+ * p2 : point bas droit
+ * couleurHaut : couleur en haut du rectangle
+ * couleurBas : couleur en bas du rectangle
+ */
 void fond_degrade_rectangle(RVB **t, COORD p1, COORD p2, RVB couleurHaut, RVB couleurBas) {
     int yStart = (int)p1.y;
     int yEnd = (int)p2.y;
@@ -221,13 +259,20 @@ void fond_degrade_rectangle(RVB **t, COORD p1, COORD p2, RVB couleurHaut, RVB co
         couleurActuelle.B = (int)((1 - ratio) * couleurHaut.B + ratio * couleurBas.B);
 
         for (int j = xStart; j <= xEnd; ++j) {
-            if (i >= 0 && i < H && j >= 0 && j < W) {
+            if (i >= 0 && i < H_FHD && j >= 0 && j < W_FHD) {
                 t[i][j] = couleurActuelle;
             }
         }
     }
 }
 
+/*
+ * Dessine et remplit une forme à partir d'un fichier de données SVG.
+ * nomFichier : chemin du fichier contenant les données de la forme
+ * couleurContour : couleur du contour (utilisée pour le tracé)
+ * couleurRemplissage : couleur pour remplir la forme
+ * offsetX, offsetY : décalages pour la position de la forme
+ */
 void dessiner_et_remplir_forme(RVB **im, const char *nomFichier, RVB couleurContour, RVB couleurRemplissage, double offsetX, double offsetY) {
     DonneesTrace donneesTrace = lire_svg(nomFichier);
 
@@ -250,6 +295,12 @@ void dessiner_et_remplir_forme(RVB **im, const char *nomFichier, RVB couleurCont
     free(edgeList.edges);
 }
 
+/*
+ * Dessine un soleil avec un effet de halo (dégradé radial).
+ * rayonInterieur : rayon du disque central plein
+ * rayonExterieur : rayon du halo extérieur
+ * couleurSoleil : couleur du soleil
+ */
 void dessiner_soleil(RVB **t, COORD centre, double rayonInterieur, double rayonExterieur, RVB couleurSoleil) {
     int xMin = (int)(centre.x - rayonExterieur);
     int xMax = (int)(centre.x + rayonExterieur);
@@ -257,9 +308,9 @@ void dessiner_soleil(RVB **t, COORD centre, double rayonInterieur, double rayonE
     int yMax = (int)(centre.y + rayonExterieur);
 
     if (xMin < 0) xMin = 0;
-    if (xMax >= W) xMax = W - 1;
+    if (xMax >= W_FHD) xMax = W_FHD - 1;
     if (yMin < 0) yMin = 0;
-    if (yMax >= H) yMax = H - 1;
+    if (yMax >= H_FHD) yMax = H_FHD - 1;
 
     for (int y = yMin; y <= yMax; ++y) {
         for (int x = xMin; x <= xMax; ++x) {
@@ -285,6 +336,12 @@ void dessiner_soleil(RVB **t, COORD centre, double rayonInterieur, double rayonE
     }
 }
 
+/*
+ * Dessin à balayage de ligne pour un trifolium avec rotation sur son centre.
+ * Rappel de l'équation implicite : f(x,y) = (x^2 + y^2)^2 - a x (x^2 - 3 y^2)
+ * a : longueur des pétales
+ * angle : en radians
+ */
 void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     double cosTheta = cos(angle);
     double sinTheta = sin(angle);
@@ -292,8 +349,8 @@ void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     double dx = centre.x;
     double dy = centre.y;
 
-    for (int i = 0; i < H; ++i) {
-        for (int j = 0; j < W; ++j) {
+    for (int i = 0; i < H_FHD; ++i) {
+        for (int j = 0; j < W_FHD; ++j) {
             double x = j;
             double y = i;
 
@@ -301,7 +358,7 @@ void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
             double xt = x - dx;
             double yt = y - dy;
 
-            // rotation et placement à l'origine
+            // rotation
             double x2 = cosTheta * xt + sinTheta * yt;
             double y2 = -sinTheta * xt + cosTheta * yt;
 
@@ -314,6 +371,12 @@ void trifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     }
 }
 
+/*
+ * Dessine un quadrifolium avec rotation sur son centre.
+ * Rappel de l'équation implicite : f(x,y) = (x^2 + y^2)^3 - a^2 (x^4 - 6 x^2 y^2 + y^4)
+ * a : longueur des pétales
+ * angle : en radians
+ */
 void quadrifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     double cosTheta = cos(angle);
     double sinTheta = sin(angle);
@@ -321,8 +384,8 @@ void quadrifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
     double dx = centre.x;
     double dy = centre.y;
 
-    for (int i = 0; i < H; ++i) {
-        for (int j = 0; j < W; ++j) {
+    for (int i = 0; i < H_FHD; ++i) {
+        for (int j = 0; j < W_FHD; ++j) {
             double x = j;
             double y = i;
 
@@ -330,7 +393,7 @@ void quadrifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
             double xt = x - dx;
             double yt = y - dy;
 
-            // rotation et placement à l'origine
+            // rotation
             double x2 = cosTheta * xt + sinTheta * yt;
             double y2 = -sinTheta * xt + cosTheta * yt;
 
@@ -343,4 +406,3 @@ void quadrifolium(RVB **im, RVB teinte, double a, COORD centre, double angle) {
         }
     }
 }
-
