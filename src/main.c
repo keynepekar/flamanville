@@ -34,7 +34,7 @@ int main() {
     dessiner_et_remplir_forme(im, "./assets/Pelouse.txt", (RVB){95, 137, 46}, (RVB){95, 137, 46}, 0, 20);
 
     // Caribou
-    dessiner_et_remplir_forme(im, "./assets/Caribou.txt", (RVB){0, 0, 0}, (RVB){0, 0, 0}, 0, 22);
+    dessiner_et_remplir_forme(im, "./assets/Caribou.txt", (RVB){0, 0, 0}, (RVB){46, 27, 8}, 0, 22);
 
     // Montagnes
     dessiner_et_remplir_forme(im, "./assets/Montagne3.txt", (RVB){125, 175, 179}, (RVB){125, 175, 179}, 0, 150);

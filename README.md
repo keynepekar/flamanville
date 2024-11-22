@@ -20,3 +20,7 @@ Et pourquoi pas. *(et aussi car on l'aime beaucoup ce flamant)*
 
 - [Keyne PEKAR - @Keyne113](https://github.com/keynepekar)
 - [Jules DAVIDOU - @the-sayreth](https://github.com/the-sayreth)
+
+## Rendu final
+
+![Rendu final de Flamanville](flamanville.png)
